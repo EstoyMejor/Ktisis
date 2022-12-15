@@ -18,6 +18,7 @@ using Ktisis.Interface.Windows.ActorEdit;
 using Ktisis.Data.Files;
 using Ktisis.Data.Serialization;
 using Ktisis.Interface.Windows.Toolbar;
+using Ktisis.Interface.Windows.Toolbar;
 
 using static Ktisis.Data.Files.AnamCharaFile;
 using Ktisis.Scene;
@@ -228,13 +229,6 @@ namespace Ktisis.Interface.Windows.Workspace
 
 			if(ImGui.Button("Force Redraw"))
 				actor->Redraw();
-		}
-
-		// camera tab. for debugging only
-
-		private static void CameraTab(GameObject target) {
-			if (ImGui.Button("Toggle work camera"))
-				WorkCamera.Toggle();
 		}
 
 		// camera tab. for debugging only
