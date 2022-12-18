@@ -237,6 +237,13 @@ namespace Ktisis.Interface.Windows.Workspace
 				WorkCamera.Toggle();
 		}
 
+		// camera tab. for debugging only
+
+		private static void CameraTab(GameObject target) {
+			if (ImGui.Button("Toggle work camera"))
+				WorkCamera.Toggle();
+		}
+
 		// Transform Table actor and bone names display, actor related extra
 
 		private static unsafe bool TransformTable(Actor* target) {

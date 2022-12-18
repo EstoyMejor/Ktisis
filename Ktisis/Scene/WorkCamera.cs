@@ -4,21 +4,12 @@ using System.Numerics;
 using Dalamud.Game.ClientState.Keys;
 
 using Ktisis.Events;
-using Ktisis.Interface;
 
 namespace Ktisis.Scene {
 	public static class WorkCamera {
 		private static bool _Active = false;
 		public static bool Active => _Active && Ktisis.IsInGPose;
-		public static void Toggle() {
-			_Active = !_Active;
-			if (Active) {
-				// TODO: ClientStructs PR
-				unsafe {
-					Position = *(Vector3*)((IntPtr)Services.Camera->Camera + 0x60);
-				}
-			}
-		}
+		public static void Toggle() => _Active = !_Active;
 
 		public static Vector3 Position = new();
 		public static Vector3 Rotation = new(0f, 0f, 1f);
@@ -45,37 +36,36 @@ namespace Ktisis.Scene {
 				vel /= 5f;
 
 			var newPos = Position;
-			if (Input.IsPurposeUsed(Input.Purpose.CameraForward)) { // Forward
+			if (EventManager.IsKeyDown(VirtualKey.W)) { // Forward
 				newPos += new Vector3(
-					-vel * ((float)Math.Sin(Rotation.X) * (float)Math.Cos(Rotation.Y)),
+					-vel * (float)Math.Sin(Rotation.X),
 					-vel * (float)Math.Sin(Rotation.Y),
-					-vel * (float)Math.Cos(Rotation.X) * (float)Math.Cos(Rotation.Y)
+					-vel * (float)Math.Cos(Rotation.X)
 				);
 			}
-			if (Input.IsPurposeUsed(Input.Purpose.CameraLeft)) { // Left
+			if (EventManager.IsKeyDown(VirtualKey.A)) { // Left
 				newPos += new Vector3(
 					-vel * (float)Math.Cos(Rotation.X),
 					0,
 					vel * (float)Math.Sin(Rotation.X)
 				);
 			}
-			if (Input.IsPurposeUsed(Input.Purpose.CameraBackward)) { // Back
+			if (EventManager.IsKeyDown(VirtualKey.S)) { // Back
 				newPos += new Vector3(
-					vel * (float)Math.Sin(Rotation.X) * (float)Math.Cos(Rotation.Y),
+					vel * (float)Math.Sin(Rotation.X),
 					vel * (float)Math.Sin(Rotation.Y),
-					vel * (float)Math.Cos(Rotation.X) * (float)Math.Cos(Rotation.Y)
+					vel * (float)Math.Cos(Rotation.X)
 				);
 			}
-			if (Input.IsPurposeUsed(Input.Purpose.CameraRight)) { // Right
+			if (EventManager.IsKeyDown(VirtualKey.D)) { // Right
 				newPos += new Vector3(
 					vel * (float)Math.Cos(Rotation.X),
 					0,
 					-vel * (float)Math.Sin(Rotation.X)
 				);
 			}
-			if (Input.IsPurposeUsed(Input.Purpose.CameraUp)) {
+			if (EventManager.IsKeyDown(VirtualKey.SPACE))
 				newPos.Y += vel / 1.25f;
-			}
 
 			Position = newPos;
 			InterpPos = Lerp(0.5f);
@@ -135,6 +125,13 @@ namespace Ktisis.Scene {
 		internal static Vector3 Lerp(float t)
 			=> InterpPos + (Position - InterpPos) * t;
 
+		private static Vector3 GetLookDir() => new Vector3(
+			(float)Math.Sin(Rotation.X) * (float)Math.Cos(Rotation.Y),
+			(float)Math.Sin(Rotation.Y),
+			(float)Math.Cos(Rotation.Z) * (float)Math.Cos(Rotation.Y)
+		);
+	}
+}
 		private static Vector3 GetLookDir() => new Vector3(
 			(float)Math.Sin(Rotation.X) * (float)Math.Cos(Rotation.Y),
 			(float)Math.Sin(Rotation.Y),
