@@ -2,7 +2,6 @@
 using System.Numerics;
 
 using Dalamud.Hooking;
-using Dalamud.Game.ClientState.Keys;
 
 using Ktisis.Scene;
 using Ktisis.Events;
@@ -29,7 +28,6 @@ namespace Ktisis.Interop.Hooks {
 			ViewHook = Hook<CalculateViewMatrix>.FromAddress(view, ViewMatrixDetour);
 			ViewHook.Enable();
 
-			EventManager.OnKeyPressed += OnKeyPressed;
 			EventManager.OnMouseEvent += OnMouseEvent;
 		}
 
@@ -79,43 +77,6 @@ namespace Ktisis.Interop.Hooks {
 			if (!state->IsFocused || !state->Pressed.HasFlag(MouseButton.Right)) return;
 
 			WorkCamera.MouseDelta += new Vector2(state->DeltaX, state->DeltaY);
-		}
-
-		internal static bool OnKeyPressed(QueueItem e) {
-			return false;
-		}
-
-		internal static Matrix4x4 CreateViewMatrix(Vector3 pos, Vector3 dir, Vector3 up) {
-			var len = (float)Math.Sqrt(dir.X * dir.X + dir.Y * dir.Y + dir.Z * dir.Z);
-			var f = dir / len;
-
-			var s = new Vector3(
-				up.Y * f.Z - up.Z * f.Y,
-				up.Z * f.X - up.X * f.Z,
-				up.X * f.Y - up.Y * f.X
-			);
-
-			var len2 = (float)Math.Sqrt(s.X * s.X + s.Y * s.Y + s.Z * s.Z);
-			var s_norm = s / len2;
-
-			var u = new Vector3(
-				f.Y * s_norm.Z - f.Z * s_norm.Y,
-				f.Z * s_norm.X - f.X * s_norm.Z,
-				f.X * s_norm.Y - f.Y * s_norm.X
-			);
-
-			var p = new Vector3(
-				-pos.X * s_norm.X - pos.Y * s_norm.Y - pos.Z * s_norm.Z,
-				-pos.X * u.X - pos.Y * u.Y - pos.Z * u.Z,
-				-pos.X * f.X - pos.Y * f.Y - pos.Z * f.Z
-			);
-
-			return new Matrix4x4(
-				s_norm.X, u.X, f.X, 0.0f,
-				s_norm.Y, u.Y, f.Y, 0.0f,
-				s_norm.Z, u.Z, f.Z, 0.0f,
-				p.X, p.Y, p.Z, 1.0f
-			);
 		}
 	}
 }
