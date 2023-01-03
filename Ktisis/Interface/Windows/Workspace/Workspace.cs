@@ -17,8 +17,6 @@ using Ktisis.Interface.Components;
 using Ktisis.Interface.Windows.ActorEdit;
 using Ktisis.Data.Files;
 using Ktisis.Data.Serialization;
-using Ktisis.Interface.Windows.Toolbar;
-using Ktisis.Interface.Windows.Toolbar;
 
 using static Ktisis.Data.Files.AnamCharaFile;
 using Ktisis.Scene;

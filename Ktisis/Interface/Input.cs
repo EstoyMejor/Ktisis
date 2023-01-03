@@ -14,6 +14,7 @@ using Ktisis.Overlay;
 using Ktisis.Structs.Bones;
 using Ktisis.Structs.Input;
 using Ktisis.Interface.Components;
+using Ktisis.Scene;
 
 namespace Ktisis.Interface {
 	public static class Input {

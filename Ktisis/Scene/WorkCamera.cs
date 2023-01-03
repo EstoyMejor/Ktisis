@@ -134,10 +134,3 @@ namespace Ktisis.Scene {
 		);
 	}
 }
-		private static Vector3 GetLookDir() => new Vector3(
-			(float)Math.Sin(Rotation.X) * (float)Math.Cos(Rotation.Y),
-			(float)Math.Sin(Rotation.Y),
-			(float)Math.Cos(Rotation.Z) * (float)Math.Cos(Rotation.Y)
-		);
-	}
-}
